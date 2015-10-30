@@ -1,0 +1,12 @@
+{
+  "transport": "ftp",
+  "hostname": "127.0.0.1",
+  "port": "21",
+  "username": "admin",
+  "target": "/setlistdraft",
+  "ignore": [
+    ".remote-sync.json",
+    ".git/**"
+  ],
+  "uploadOnSave": true
+}

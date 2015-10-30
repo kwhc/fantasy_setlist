@@ -1,0 +1,32 @@
+<div class="row row-fluid">
+  <div class="col-xs-12">
+    <div class="user-header" style="background-image:url('images/chris_martin.jpg');">
+      <div class="inner-content">
+        <h1>{{tempuser.name}}'s Picks</h1>
+        For <a href="#/draft/{{tempuser.draft.id}}">{{tempuser.draft.title}} on <span ng-bind="tempuser.draft.draft_date | date:'fullDate'" /> </a>
+      </div>
+      <div class="inner-overlay"></div>
+    </div>
+    <div class="section">
+      <ul class="list-unstyled list-striped song-list">
+        <li ng-repeat="pick in picks">
+          <span>
+            <div class="container">
+              <div class="row row-fluid">
+                <div class="col-xs-3 col-md-2 col-md-offset-1">
+                  Round {{pick.round_id}}
+                </div>
+                <div class="col-xs-7 col-md-6">
+                  {{pick.song_name}}
+                </div>
+                <div class="col-xs-2 col-md-1">
+                  x
+                </div>
+              </div>
+            </div>
+          </span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

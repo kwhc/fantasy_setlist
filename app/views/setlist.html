@@ -1,0 +1,45 @@
+<div class="row hide">
+    <div class="col-xs-12">
+        <form>
+            <div class="control-group">
+                <input type="text" class="form-control" ng-model="draftId" placeholder="Draft ID" />
+                <input type="text" class="form-control" ng-model="userId" placeholder="User ID" />
+                <input type="text" class="form-control" ng-model="songId" placeholder="Song ID" />
+                <input type="text" class="form-control" ng-model="roundId" placeholder="Round ID" />
+            </div>
+            <div class="control-group">
+                <button class="btn btn-default" ng-click="postPick();"><i class="fa fa-plus"></i> Add</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <h2 ng-bind="data.name"></h2>
+    </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    <autocomplete ng-model="artistchoice" data="artist" on-type="updateArtist"></autocomplete>
+  </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="row">
+            <div class="col-xs-3" ng-repeat="album in albums" style="height:200px;padding-top:10px;padding-bottom:10px;">
+                <div>
+                    <img ng-src="{{album.images[0].url}}" class="img-responsive" />
+                    <span ng-bind="album.name" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12">
+        <div ng-repeat="song in songs">
+            {{song.title}}
+        </div>
+
+    </div>
+</div>
+

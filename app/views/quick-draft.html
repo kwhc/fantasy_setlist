@@ -1,0 +1,217 @@
+<div class="container-fluid">
+
+      <div class="row">
+          <div class="col-xs-12 col-md-4">
+              <img ng-show="artist.img" src="{{artist.img}}" class="img-responsive" />
+              <div style="background-color:rgba(0,0,0,.9);color:rgba(248,248,248,1);padding-bottom:32px;padding-top:24px;padding-left:24px;padding-right:24px;">
+                  <span ng-show="artist.name != null" class="text-uppercase text-muted">Setlist draft for</span>
+                  <h1 style="margin:0;text-transform:capitalize;"><span ng-bind="artist.name" /></h1>
+                  <div class=""><span ng-show="venue.name != null"> at {{venue.name}}</span> <span ng-show="eventDate != null">on {{eventDate | date:format}}</span></div>
+                  <span ng-bind="draft.id" />
+              </div>
+          </div>
+
+        <div class="col-xs-12 col-md-8">
+          <div ng-show="showBandName">
+
+                  <div style="padding-top:32px;padding-bottom:32px;">
+                    <form ng-submit="getArtists(artistName)">
+                      <div class="form-group">
+                          <label for="eventname">Band Name</label>
+                          <div class="input-group">
+                            <input id="eventname" ng-model="artistName" class="form-control" autocomplete="off" typeahead="suggestion for suggestion in artists | filter: $viewValue" autocomplete="off" style="margin-bottom:8px;" />
+                            <span class="input-group-btn">
+                              <a ng-click="getArtists(artistName)" class="btn btn-default" style="margin-bottom:16px;">Find Artist</a>
+                            </span>
+                          </div>
+                          <ul class="list-unstyled list-inline">
+                            <li ng-repeat="a in artists">
+                              <a href ng-click="setArtist(a)" class="" style="background-color:rgba(248,248,248,1);height:50px;display:inline-block;padding-right:8px;margin-bottom:8px;">
+                                <img ng-src="{{setArtistImage(a)}}" alt="{{a.name}}" height="50px" />
+                                {{a.name}}
+                              </a>
+                            </li>
+                          </ul>
+                      </div>
+                    </form>
+                    <form ng-submit="getVenue(venueName)">
+                      <div class="form-group">
+                          <label for="venuename">Venue Name</label>
+                          <div class="input-group">
+                            <input id="venuename" ng-model="venueName" class="form-control" autocomplete="off" />
+                            <span class="input-group-btn">
+                              <a class="btn btn-default" ng-click="getVenue(venueName)">Find Venue</a>
+                            </span>
+                          </div>
+                          <ul class="list-unstyled list-inline">
+                            <li ng-repeat="v in possibleVenues">
+                              <a href ng-click="setVenue(v)" style="background-color:rgba(248,248,248,1);padding:8px;display:block;">
+                                <div>{{v.name}}</div>
+                                <div><span class="small">{{v.city}}</span></div>
+                              </a>
+                            </li>
+                          </ul>
+                      </div>
+                    </form>
+                    <div class="form-group">
+                        <label for="eventdate">Date</label>
+                        <div class="input-group">
+                          <!--<input id="eventdate" type="text" class="form-control" datepicker-popup="{{format}}" ng-model="eventDate" is-open="opened" min-date="minDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />-->
+                          <input id="eventdate" type="text" class="form-control" datepicker-popup="{{format}}" ng-model="eventDate" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                          <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="open($event)"><i class="fa fa-calendar"></i></button>
+                          </span>
+                        </div>
+                    </div>
+                  </div>
+                <form ng-submit="toggleBandName()">
+                  <div class="">
+                      <div class="form-group">
+                          <button type="submit" class="btn btn-default btn-block hide">Enter Players</button>
+                          <button class="btn btn-default btn-block btn-lg" ng-click="createDraft()" ng-disabled="disableAddPlayersBtn()"><i class="fa fa-user-plus"></i> Add Players</button>
+                      </div>
+                  </div>
+              </form>
+          </div>
+          <div ng-show="showPlayers" style="padding-top:32px;padding-bottom:32px;">
+              <div class="row">
+                  <div class="col-xs-12">
+                      <div style="padding-bottom:30px;padding-left:20px;padding-right:20px;">
+                          <div class="row">
+                              <div class="col-xs-12 col-sm-8">
+                                  <h2>{{playerCount}} Players</h2>
+                                  <form class="form" ng-submit="addPlayer()">
+                                      <div class="form-group">
+                                          <input type="text" class="form-control" ng-model="newPlayerName" placeholder="Player Name" />
+                                      </div>
+
+                                      <button class="btn btn-default btn-block"><i class=""></i>Add Player</button>
+                                  </form>
+                              </div>
+                              <div class="col-xs-12 col-sm-4">
+                                  <p>Enter the players here.</p>
+                                  <p>You can draw straws or think of your own way to decide the order in which you will draft your songs.</p>
+                                  <p>Enter the players in order or re-arrange the players however you'd like.</p>
+                                  <p>If you want a quick way to decide the order you can press the shuffle button once you've entered in all the players.</p>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="col-xs-12" ui-tree callbacks="treeCallbacks">
+                      <div style="padding-top:30px;padding-bottom:30px;padding-left:20px;padding-right:20px;">
+                          <ul class="list-unstyled" ui-tree-nodes="" ng-model="players">
+                              <li ng-repeat="p in players" ui-tree-node>
+                                  <a style="padding-top:12px;padding-bottom:12px;display:block;" href="#" onclick="return false;">
+                                      <div class="row">
+                                          <div class="col-xs-2" ><i class="fa fa-sort"></i></div>
+                                          <div class="col-xs-10">
+                                              <h4 style="margin:0;text-transform:capitalize;">{{p.name}}</h4>
+                                              <span class="">Pick {{p.pos}}</span>
+                                              <span class="hide">Index: {{players.indexOf(p)}}</span>
+                                          </div>
+                                      </div>
+                                  </a>
+                              </li>
+                          </ul>
+                      </div>
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="col-xs-12">
+                      <div style="padding-top:30px;padding-bottom:30px;border-top:solid 1px rgba(0,0,0,.1);padding-left:20px;padding-right:20px;">
+                          <div class="row">
+                              <div class="col-xs-12 col-sm-8">
+                                  <div>
+                                      <div class="radio">
+                                          <label>
+                                              <input type="radio" ng-model="draftOrderType" value="snake">
+                                              Snake
+                                          </label>
+                                      </div>
+                                      <div class="radio">
+                                          <label>
+                                              <input type="radio" ng-model="draftOrderType" value="straight">
+                                              Straight
+                                          </label>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="col-xs-12 col-sm-4">
+                                  <div>
+                                      <p>Choose if you'd like to select a straight or snaked draft order.</p>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="col-xs-12">
+                    <div style="padding-left:20px;padding-right:20px;">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-default btn-block" ng-click="setDraftOrder()">Set Draft Order, Choose Songs</button>
+                        </div>
+                    </div>
+                  </div>
+              </div>
+          </div>
+
+          <div ng-show="showSongs">
+              <div class="col-xs-12 col-sm-8">
+                  <div style="padding-top:30px;padding-bottom:30px;padding-left:20px;padding-right:20px;">
+                      <h3>{{'Round '+currentDraftRound}} - {{playersPick(currentPlayer.name)}}</h3>
+                      <span class="small">({{currentPlayer.id}})</span>
+
+                      <form>
+                          <div class="form-group">
+                              <select class="form-control hide" ng-model="currentPlayer" ng-options="player.name for player in players"></select>
+                          </div>
+                          <div class="form-group">
+                              <input class="form-control" ng-model="currentSong" />
+                          </div>
+                          <div class="form-group">
+                              <button type="submit" class="btn btn-default" ng-disabled="draftRoundEnd()" ng-click="addSong(currentPlayer.id)">Add Song</button>
+                          </div>
+                      </form>
+                  </div>
+              </div>
+              <div class="col-xs-12 col-sm-4">
+                  <div style="padding-top:30px;padding-bottom:30px;">
+                      <p>Each player selects one song per round. If the band plays that song, the player gets 1 point.</p>
+                      <p>The last round is the bonus round. Choose a song that you want the band to play, but you don't think they will. If they play it, that song is worth 2 points.</p>
+                  </div>
+              </div>
+              <div class="col-xs-12">
+                  <div class="row">
+                      <div class="col-xs-12 col-sm-6 col-md-4" ng-repeat="p in players"e>
+                          <div style="padding-top:30px;padding-bottom:30px;padding-left:20px;padding-right:20px;">
+                              <div class="row">
+                                  <div class="col-xs-12">
+                                      <div style="">
+                                          <h4 style="margin:0;text-transform:capitalize;padding:10px;border-bottom:solid 1px rgba(0,0,0,.2);">{{p.name}}</h4>
+                                          <span class="hide"> Pos: {{p.pos}}</span>
+                                          <span class="hide">Index: {{players.indexOf(p)}}</span>
+                                          <ul class="list-unstyled list-striped">
+                                              <li style="padding:10px;" ng-repeat="song in p.songs">
+                                                <span>
+                                                  <span class="text-muted">Round {{song.round}}</span>
+                                                  <span class="" style="text-transform:capitalize;" ng-bind="song.name" />
+                                                </span>
+                                              </li>
+                                          </ul>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+      </div>
+
+
+    </div>
+</div>

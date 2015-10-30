@@ -1,0 +1,37 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+
+      <div class="draft-header draft-{{draft.draft_id}}" style="background-image:url('{{randomImageBackground(draft.draft_id)}}');">
+        <div class="inner-content">
+          <h1>{{draft.title}}</h1>
+          <div style="text-align:left;">on {{draft.date | date:'EEEE MMMM dd, yyyy'}}</div>
+        </div>
+        <div class="inner-overlay"></div>
+      </div>
+
+      <div class="section">
+        <ul class="list-unstyled list-striped">
+          <li ng-repeat="user in users">
+                <a href="#/user/{{user.id}}">
+                  <div class="row row-fluid">
+                    <div class="col-xs-10 col-md-3 col-md-offset-1">
+                      {{user.name}}
+                    </div>
+                    <div class="col-xs-2 col-md-4">
+                      <ul class="list-unstyled">
+                        <li ng-repeat="pick in user.picks | orderBy:'round_id'">
+                          {{'Round ' + pick.round_id + ":"}}
+                          {{pick.song_name}}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,17 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="section">
+        <h1>{{user.name}}</h1>
+        <div>{{user.createdOn | date:'EEEE, MMMM dd, yyyy'}}</div>
+        <ul class="list-unstyled">
+          <li ng-repeat="pick in picks">
+            {{'Round '+pick.round_id+': '}}
+            {{pick.song_name}}
+          </li>
+        </ul>
+        <a ng-href="#/draft/{{user.draftId}}" class="btn btn-default"><i class="fa fa-angle-double-left"></i> Back to draft</a>
+      </div>
+    </div>
+  </div>
+</div>
